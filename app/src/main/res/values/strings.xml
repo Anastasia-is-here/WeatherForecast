@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WeatherForecast</string>
+    <string name="weather_forecast_1">Загрузка…</string>
+    <string name="temperature_label">10°</string>
+    <string name="blank_label">-</string>
+    <string name="humidity_desc">Humidity icon</string>
+    <string name="wind_desc">Wind icon</string>
+    <string name="humidity">Влажность</string>
+    <string name="wind">Ветер</string>
+</resources>

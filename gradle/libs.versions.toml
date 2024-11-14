@@ -1,0 +1,62 @@
+[versions]
+agp = "8.7.0"
+blurview = "1.6.6"
+blurviewVersion = "version-2.0.5"
+bumptechGlide = "glide"
+dimezis = "BlurView"
+githubBlurview = "version-2.0.3"
+gson = "2.10.1"
+kotlin = "1.9.24"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+lifecycleExtensions = "2.2.0"
+lifecycleRuntimeKtx = "2.8.6"
+loggingInterceptor = "4.9.3"
+lottie = "6.6.0"
+material = "1.12.0"
+activity = "1.9.3"
+constraintlayout = "2.1.4"
+okhttp = "4.12.0"
+playServicesLocation = "21.3.0"
+repo = "Tag"
+retrofit = "2.9.0"
+volley = "1.2.1"
+weatherview = "3.0.0"
+
+[libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+androidx-bumptech-glide = { module = "androidx.github:bumptech.glide", version.ref = "bumptechGlide" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-dimezis = { module = "androidx.github:Dimezis", version.ref = "dimezis" }
+androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleExtensions" }
+androidx-lifecycle-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+blurview = { module = "com.eightbitlab:blurview", version.ref = "blurview" }
+blurview-vversion203 = { module = "com.github.Dimezis:BlurView", version.ref = "githubBlurview" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+dimezis-blurview = { module = "com.github.Dimezis:BlurView", version.ref = "blurviewVersion" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+repo = { module = "com.github.User:Repo", version.ref = "repo" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+volley = { module = "com.android.volley:volley", version.ref = "volley" }
+weatherview = { module = "com.github.MatteoBattilana:WeatherView", version.ref = "weatherview" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
