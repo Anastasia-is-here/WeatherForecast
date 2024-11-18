@@ -7,4 +7,6 @@
     <string name="wind_desc">Wind icon</string>
     <string name="humidity">Влажность</string>
     <string name="wind">Ветер</string>
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
 </resources>

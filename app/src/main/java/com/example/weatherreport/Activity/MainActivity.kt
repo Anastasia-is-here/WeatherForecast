@@ -1,27 +1,29 @@
 package com.example.weatherreport.Activity
 
 
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.view.ViewGroup
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.weatherreport.databinding.ActivityMainBinding
-import eightbitlab.com.blurview.RenderScriptBlur
+import com.google.gson.Gson
+import kotlinx.serialization.json.Json
 import org.json.JSONObject
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,10 +37,11 @@ class MainActivity : AppCompatActivity() {
         val lat = intent.getStringExtra("lat")
         val long = intent.getStringExtra("long")
         
-        getJsonData(lat, long)
+        getJsonDataNow(lat, long)
+        getJsonDataForecast(lat, long)
     }
 
-    private fun getJsonData(lat: String?, long: String?) {
+    private fun getJsonDataNow(lat: String?, long: String?) {
         val API_KEY = "4092c6357241c95b09fc66605900de08"
         val queue = Volley.newRequestQueue(this)
         val url = "https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric&lang=ru"
@@ -48,7 +51,8 @@ class MainActivity : AppCompatActivity() {
                 response ->
                 setValues(response)
             },
-            { Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show() })
+            {
+                Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show() })
         queue.add(jsonRequest)
     }
 
@@ -64,5 +68,40 @@ class MainActivity : AppCompatActivity() {
         binding.windText.text = "${windspeed} Км/ч"
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getJsonDataForecast(lat: String?, long: String?) {
+        val API_KEY = "4092c6357241c95b09fc66605900de08"
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric&lang=ru"
+        val jsonRequest = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            {
+                    response ->
+                setValuesForecast(response)
+            },
+            { Log.e("badbadbad", it.toString())
+                Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show() })
+        queue.add(jsonRequest)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setValuesForecast(response: JSONObject){
+//        var temp = response.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("temp_max")
+//        var tempConverted = temp.toFloat().toInt().toString()
+//        binding.dayOneMaxTemp.text = "${tempConverted}°C"
+//        temp = response.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("temp_min")
+//        tempConverted = temp.toFloat().toInt().toString()
+//        binding.dayOneMinTemp.text = "${tempConverted}°C"
+//
+////        temp = response.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("temp_max")
+////        tempConverted = temp.toFloat().toInt().toString()
+////        binding.dayOneMaxTemp.text = "${tempConverted}°C"
+//
+//        var dateStr = response.getJSONArray("list").getJSONObject(0).getString("dt_txt").take(10)
+//        var date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+        var serialization = Json { ignoreUnknownKeys = true}
+        val tempArray: ArrayList<cForecast> = serialization.decodeFromString(response.toString())
+    }
 
 }
