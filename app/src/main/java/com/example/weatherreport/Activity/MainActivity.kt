@@ -14,9 +14,14 @@ import com.android.volley.toolbox.Volley
 import com.example.weatherreport.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 import org.json.JSONObject
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -79,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     response ->
                 setValuesForecast(response)
             },
-            { Log.e("badbadbad", it.toString())
+            {
                 Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show() })
         queue.add(jsonRequest)
     }
@@ -101,7 +106,36 @@ class MainActivity : AppCompatActivity() {
 //        var date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         var serialization = Json { ignoreUnknownKeys = true}
-        val tempArray: ArrayList<cForecast> = serialization.decodeFromString(response.toString())
+        val tempArray = serialization.decodeFromString<WeatherResponse>(response.toString())
+
+
+
+        var c : Calendar = Calendar.getInstance();
+        val dayOne = tempArray.list.slice(0..7)
+        val dayTwo = tempArray.list.slice(8..15)
+        val dayThree = tempArray.list.slice(16..23)
+        val dayFour = tempArray.list.slice(24..31)
+        val dayFive = tempArray.list.slice(32..39)
+
+        binding.dayOneMaxTemp.text = dayOne.maxBy { it.main.tempMax }.main.tempMax.toString()
+        binding.dayOneMinTemp.text = dayOne.minBy { it.main.tempMin }.main.tempMin.toString()
+
+        binding.dayTwoMaxTemp.text = dayTwo.maxBy { it.main.tempMax }.main.tempMax.toString()
+        binding.dayTwoMinTemp.text = dayTwo.minBy { it.main.tempMin }.main.tempMin.toString()
+
+        val dateStr= dayThree[0].dtTxt.take(10)
+        var date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val langRu = Locale("ru")
+        val day = date.dayOfWeek.getDisplayName(TextStyle.FULL, langRu)
+        binding.dayOneDay.text = day.replaceFirstChar(Char::titlecase).take(2)
+        binding.dayThreeMaxTemp.text = dayThree.maxBy { it.main.tempMax }.main.tempMax.toString()
+        binding.dayThreeMinTemp.text = dayThree.minBy { it.main.tempMin }.main.tempMin.toString()
+
+        binding.dayFourMaxTemp.text = dayFour.maxBy { it.main.tempMax }.main.tempMax.toString()
+        binding.dayFourMinTemp.text = dayFour.minBy { it.main.tempMin }.main.tempMin.toString()
+
+        binding.dayFiveMaxTemp.text = dayFive.maxBy { it.main.tempMax }.main.tempMax.toString()
+        binding.dayFiveMinTemp.text = dayFive.minBy { it.main.tempMin }.main.tempMin.toString()
     }
 
 }
