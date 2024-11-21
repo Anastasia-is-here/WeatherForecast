@@ -1,6 +1,7 @@
 package com.example.weatherreport.Activity
 
 
+import android.R
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -22,11 +23,25 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    fun shortDayName(day: String): String {
+        val result = when(day){
+            "понедельник" -> "Пн"
+            "вторник" -> "Вт"
+            "среда" -> "Ср"
+            "четверг" -> "Чт"
+            "пятница" -> "Пт"
+            "суббота" -> "Сб"
+            "воскресенье" -> "Вс"
+            else -> "null"
+        }
+        return result
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         binding.city.text = response.getString("name")
         binding.weather.text = response.getJSONArray("weather").getJSONObject(0).getString("description")
         var temp = response.getJSONObject("main").getString("temp")
-        var tempConverted = temp.toFloat().toInt().toString()
+        var tempConverted = temp.toFloat().roundToInt().toString()
         binding.tempText.text = "${tempConverted}°C"
         var hum = response.getJSONObject("main").getString("humidity")
         binding.humidityText.text = "${hum}%"
@@ -91,19 +106,6 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setValuesForecast(response: JSONObject){
-//        var temp = response.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("temp_max")
-//        var tempConverted = temp.toFloat().toInt().toString()
-//        binding.dayOneMaxTemp.text = "${tempConverted}°C"
-//        temp = response.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("temp_min")
-//        tempConverted = temp.toFloat().toInt().toString()
-//        binding.dayOneMinTemp.text = "${tempConverted}°C"
-//
-////        temp = response.getJSONArray("list").getJSONObject(0).getJSONObject("main").getString("temp_max")
-////        tempConverted = temp.toFloat().toInt().toString()
-////        binding.dayOneMaxTemp.text = "${tempConverted}°C"
-//
-//        var dateStr = response.getJSONArray("list").getJSONObject(0).getString("dt_txt").take(10)
-//        var date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
         var serialization = Json { ignoreUnknownKeys = true}
         val tempArray = serialization.decodeFromString<WeatherResponse>(response.toString())
@@ -117,25 +119,35 @@ class MainActivity : AppCompatActivity() {
         val dayFour = tempArray.list.slice(24..31)
         val dayFive = tempArray.list.slice(32..39)
 
-        binding.dayOneMaxTemp.text = dayOne.maxBy { it.main.tempMax }.main.tempMax.toString()
-        binding.dayOneMinTemp.text = dayOne.minBy { it.main.tempMin }.main.tempMin.toString()
+        binding.dayOneMaxTemp.text = dayOne.maxBy { it.main.tempMax }.main.tempMax.roundToInt().toString() + "°C"
+        binding.dayOneMinTemp.text = dayOne.minBy { it.main.tempMin }.main.tempMin.roundToInt().toString() + "°C"
 
-        binding.dayTwoMaxTemp.text = dayTwo.maxBy { it.main.tempMax }.main.tempMax.toString()
-        binding.dayTwoMinTemp.text = dayTwo.minBy { it.main.tempMin }.main.tempMin.toString()
+        binding.dayTwoMaxTemp.text = dayTwo.maxBy { it.main.tempMax }.main.tempMax.roundToInt().toString() + "°C"
+        binding.dayTwoMinTemp.text = dayTwo.minBy { it.main.tempMin }.main.tempMin.roundToInt().toString() + "°C"
 
-        val dateStr= dayThree[0].dtTxt.take(10)
+        var dateStr= dayThree[0].dtTxt.take(10)
         var date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        val langRu = Locale("ru")
-        val day = date.dayOfWeek.getDisplayName(TextStyle.FULL, langRu)
-        binding.dayOneDay.text = day.replaceFirstChar(Char::titlecase).take(2)
-        binding.dayThreeMaxTemp.text = dayThree.maxBy { it.main.tempMax }.main.tempMax.toString()
-        binding.dayThreeMinTemp.text = dayThree.minBy { it.main.tempMin }.main.tempMin.toString()
+        var langRu = Locale("ru")
+        var day = date.dayOfWeek.getDisplayName(TextStyle.FULL, langRu)
+        binding.dayThreeDay.text = shortDayName(day)
+        binding.dayThreeMaxTemp.text = dayThree.maxBy { it.main.tempMax }.main.tempMax.roundToInt().toString() + "°C"
+        binding.dayThreeMinTemp.text = dayThree.minBy { it.main.tempMin }.main.tempMin.roundToInt().toString() + "°C"
 
-        binding.dayFourMaxTemp.text = dayFour.maxBy { it.main.tempMax }.main.tempMax.toString()
-        binding.dayFourMinTemp.text = dayFour.minBy { it.main.tempMin }.main.tempMin.toString()
+        dateStr= dayFour[0].dtTxt.take(10)
+        date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        langRu = Locale("ru")
+        day = date.dayOfWeek.getDisplayName(TextStyle.FULL, langRu)
+        binding.dayFourDay.text = shortDayName(day)
+        binding.dayFourMaxTemp.text = dayFour.maxBy { it.main.tempMax }.main.tempMax.roundToInt().toString() + "°C"
+        binding.dayFourMinTemp.text = dayFour.minBy { it.main.tempMin }.main.tempMin.roundToInt().toString() + "°C"
 
-        binding.dayFiveMaxTemp.text = dayFive.maxBy { it.main.tempMax }.main.tempMax.toString()
-        binding.dayFiveMinTemp.text = dayFive.minBy { it.main.tempMin }.main.tempMin.toString()
+        dateStr= dayFive[0].dtTxt.take(10)
+        date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        langRu = Locale("ru")
+        day = date.dayOfWeek.getDisplayName(TextStyle.FULL, langRu)
+        binding.dayFiveDay.text = shortDayName(day)
+        binding.dayFiveMaxTemp.text = dayFive.maxBy { it.main.tempMax }.main.tempMax.roundToInt().toString() + "°C"
+        binding.dayFiveMinTemp.text = dayFive.minBy { it.main.tempMin }.main.tempMin.roundToInt().toString() + "°C"
     }
 
 }
